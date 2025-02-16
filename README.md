@@ -1,4 +1,4 @@
---- 
+
 
 # 📚 Study Tracker - Customizable Exam Preparation Planner  
 
@@ -16,6 +16,6 @@ Stay organized and boost your productivity with this easy-to-use study tracker! 
 
 🔗 **Check out the code**: [GitHub Repo Link]  
 
----  
+
 
 Let me know if you want any modifications! 😊
