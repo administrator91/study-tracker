@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Style Study Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input, button {
+            background: black;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .progress {
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background: #00ff00;
+        }
+        .glow {
+            text-shadow: 0 0 10px #00ff00;
+            font-size: 24px;
+            animation: glowEffect 1.5s infinite alternate;
+        }
+        @keyframes glowEffect {
+            from { text-shadow: 0 0 10px #00ff00; }
+            to { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+        }
+        .glow:hover {
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
+            color: #ff0000;
+        }
+        .logo-container {
+            margin-top: 20px;
+        }
+        .logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        .glitch {
+            font-size: 36px;
+            font-weight: bold;
+            position: relative;
+            animation: glitchEffect 1.5s infinite alternate;
+        }
+        @keyframes glitchEffect {
+            0% { text-shadow: 2px 2px 5px #ff0000, -2px -2px 5px #00ffff; }
+            25% { text-shadow: -2px -2px 5px #ff0000, 2px 2px 5px #00ffff; }
+            50% { text-shadow: 3px 3px 6px #ff0000, -3px -3px 6px #00ffff; }
+            75% { text-shadow: -3px -3px 6px #ff0000, 3px 3px 6px #00ffff; }
+            100% { text-shadow: 2px 2px 5px #ff0000, -2px -2px 5px #00ffff; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="glow">Hacker Style Study Tracker</h1>
+        <p>Set your exam preparation schedule</p>
+        <input type="text" id="examName" placeholder="Enter Exam Name">
+        <input type="number" id="days" placeholder="Days to Prepare">
+        <input type="url" id="examLogo" placeholder="Exam Logo URL">
+        <button onclick="setSchedule()">Set Schedule</button>
+        <button onclick="resetProgress()">Reset Progress</button>
+        <div id="schedule"></div>
+        <div class="progress">
+            <p>Progress:</p>
+            <p>Created by - Rajarshi Sarkar</p>
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("totalDays")) {
+                setSchedule(true);
+            }
+        });
+
+        function setSchedule(isReload = false) {
+            let examName = isReload ? localStorage.getItem("examName") : document.getElementById("examName").value;
+            let days = isReload ? parseInt(localStorage.getItem("totalDays")) : parseInt(document.getElementById("days").value);
+            let examLogo = isReload ? localStorage.getItem("examLogo") : document.getElementById("examLogo").value;
+            let completedDays = isReload ? parseInt(localStorage.getItem("completedDays")) : 0;
+            let startDate = isReload ? new Date(localStorage.getItem("startDate")) : new Date();
+            let endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + days);
+
+            if (!isReload) {
+                localStorage.setItem("examName", examName);
+                localStorage.setItem("examLogo", examLogo);
+                localStorage.setItem("completedDays", completedDays);
+                localStorage.setItem("totalDays", days);
+                localStorage.setItem("startDate", startDate);
+                localStorage.setItem("endDate", endDate);
+                localStorage.setItem("lastCompletedDate", "");
+            }
+
+            document.getElementById("schedule").innerHTML = `
+                <h2 class="glitch">${examName} Preparation</h2>
+                <p>Start Date: ${startDate.toDateString()}</p>
+                <p>End Date: ${endDate.toDateString()}</p>
+                <div class="logo-container">
+                    <img src="${examLogo}" alt="Exam Logo" class="logo">
+                </div>
+                <p id="countdown">Days Left: ${days - completedDays}</p>
+                <button id="completeDayBtn" onclick="updateProgress()">Mark Day Complete</button>
+            `;
+            updateProgressBar();
+        }
+
+        function updateProgress() {
+            let totalDays = parseInt(localStorage.getItem("totalDays"));
+            let completedDays = parseInt(localStorage.getItem("completedDays"));
+            let lastCompletedDate = localStorage.getItem("lastCompletedDate");
+            let today = new Date().toDateString();
+
+            if (lastCompletedDate !== today && completedDays < totalDays) {
+                completedDays++;
+                localStorage.setItem("completedDays", completedDays);
+                localStorage.setItem("lastCompletedDate", today);
+                document.getElementById("countdown").textContent = `Days Left: ${totalDays - completedDays}`;
+                updateProgressBar();
+            }
+        }
+
+        function updateProgressBar() {
+            let totalDays = parseInt(localStorage.getItem("totalDays"));
+            let completedDays = parseInt(localStorage.getItem("completedDays"));
+            let progress = (completedDays / totalDays) * 100;
+            document.getElementById("progressBar").style.width = progress + "%";
+        }
+
+        function resetProgress() {
+            localStorage.removeItem("completedDays");
+            localStorage.removeItem("lastCompletedDate");
+            setSchedule(true);
+        }
+    </script>
+</body>
+</html>
