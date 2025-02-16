@@ -12,9 +12,9 @@ This is a simple **Study Tracker** built using **HTML, CSS, and JavaScript** tha
 
 Stay organized and boost your productivity with this easy-to-use study tracker! 🚀  
 
-📌 **Live Demo** (if hosted): [Add Link]  
+📌 **Live Demo** : ![Image](https://github.com/user-attachments/assets/587623a7-0540-48a4-91da-22461e43e88b) 
 
-🔗 **Check out the code**: [GitHub Repo Link]  
+🔗 **Check out the code**: [[GitHub Repo Link] ](https://administrator91.github.io/study-tracker/) 
 
 
 
